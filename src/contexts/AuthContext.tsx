@@ -330,9 +330,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       }
     } else {
-      // No session → email confirmation is ON → profile will be created on first login
-      // Everything is already stored in raw_user_meta_data via options.data above.
-      console.info('Email confirmation required — profile will be created on first login.');
+      // No session → email confirmation is ON
+      // Still attempt the insert — the public insert policy allows this.
+      // If it fails, fetchAndSetProfile will retry on first login.
+      if (metadata.role === 'agent') {
+        const row = buildAgentRow(data.user.id, email, resolvedAgencyId, signupMeta);
+        const { error: agentErr } = await supabase.from('agents').insert(row);
+        if (agentErr) {
+          console.warn('Agent insert (pre-confirm) failed — will retry on login:', agentErr.message, agentErr.details);
+        } else {
+          console.info('Agent row created before email confirmation.');
+        }
+      }
     }
   };
 
