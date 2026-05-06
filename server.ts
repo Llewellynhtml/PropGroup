@@ -3,8 +3,16 @@ import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
-import { initDb } from "./server/config/db.ts";
-import { initPostWorker } from "./server/workers/postWorker.ts";
+let initDb: () => void = () => {};
+let initPostWorker: () => void = () => {};
+try {
+  const dbModule = await import("./server/config/db.ts");
+  initDb = dbModule.initDb;
+  const workerModule = await import("./server/workers/postWorker.ts");
+  initPostWorker = workerModule.initPostWorker;
+} catch (e) {
+  console.error("Could not load DB/worker modules (native deps may be missing):", e);
+}
 
 // Import Routes
 import authRoutes from "./server/routes/auth.ts";
@@ -31,7 +39,8 @@ try {
   initDb();
   console.log("Database initialized successfully");
 } catch (error) {
-  console.error("Failed to initialize database:", error);
+  console.error("Failed to initialize database (non-fatal):", error);
+  console.warn("Server will continue without local DB — Supabase handles auth/data.");
 }
 
 // Initialize Post Worker
@@ -39,7 +48,7 @@ try {
   initPostWorker();
   console.log("Post publishing worker initialized");
 } catch (error) {
-  console.error("Failed to initialize post worker:", error);
+  console.error("Failed to initialize post worker (non-fatal):", error);
 }
 
 async function startServer() {
