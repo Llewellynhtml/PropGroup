@@ -301,9 +301,8 @@ export default function AgentSignUp({ onToggle }: AgentSignUpProps) {
       );
     } catch (err: any) {
       console.error('Agent signup error:', err);
-      // Surface the actual Supabase message so it's visible in dev
-      const msg = err?.message || err?.error_description || JSON.stringify(err);
-      toast.error(msg || 'Failed to create account');
+      const msg = err?.message || err?.error_description || err?.error || JSON.stringify(err);
+      toast.error('Signup failed: ' + (msg || 'Unknown error'), { duration: 10000 });
     } finally {
       setIsLoading(false);
     }
