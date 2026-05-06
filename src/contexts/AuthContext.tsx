@@ -93,7 +93,7 @@ async function fetchAndSetProfile(
           .maybeSingle();
 
         if (createErr) {
-          console.warn('Could not create agent profile on login:', createErr.message);
+          console.error('Could not create agent profile on login:', createErr.message, createErr.details, createErr.hint);
         } else if (created) {
           setUser({
             id: created.id,
@@ -285,7 +285,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (metadata.role === 'agent') {
         const row = buildAgentRow(data.user.id, email, resolvedAgencyId, signupMeta);
         const { error: agentErr } = await supabase.from('agents').insert(row);
-        if (agentErr) console.warn('Agent insert:', agentErr.message);
+        if (agentErr) {
+          console.error('Agent insert failed:', agentErr);
+          throw new Error('Profile setup failed: ' + agentErr.message);
+        }
       } else {
         // Agency
         const { data: agency, error: agencyErr } = await supabase
