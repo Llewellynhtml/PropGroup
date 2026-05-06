@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { motion, AnimatePresence } from 'motion/react';
-import AuthHero from '../components/auth/AuthHero';
-import RoleSwitcher from '../components/auth/RoleSwitcher';
-import AgentSignIn from '../components/auth/AgentSignIn';
-import AgencySignIn from '../components/auth/AgencySignIn';
-import AgentSignUp from '../components/auth/AgentSignUp';
-import AgencySignUp from '../components/auth/AgencySignUp';
+import AuthHero from '../components/Auth/AuthHero';
+import RoleSwitcher from '../components/Auth/RoleSwitcher';
+import AgentSignIn from '../components/Auth/AgentSignIn';
+import AgencySignIn from '../components/Auth/AgencySignIn';
+import AgentSignUp from '../components/Auth/AgentSignUp';
+import AgencySignUp from '../components/Auth/AgencySignUp';
 import { Megaphone } from 'lucide-react';
 
 export default function AuthPage() {
