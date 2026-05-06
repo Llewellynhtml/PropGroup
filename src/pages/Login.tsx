@@ -3,10 +3,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { Megaphone, ArrowRight, CheckCircle2, Star, Users, Layout } from 'lucide-react';
-import AgentSignIn from '../components/auth/AgentSignIn';
-import AgencySignIn from '../components/auth/AgencySignIn';
-import AgentSignUp from '../components/auth/AgentSignUp';
-import AgencySignUp from '../components/auth/AgencySignUp';
+import AgentSignIn from '../components/Auth/AgentSignIn';
+import AgencySignIn from '../components/Auth/AgencySignIn';
+import AgentSignUp from '../components/Auth/AgentSignUp';
+import AgencySignUp from '../components/Auth/AgencySignUp';
 import { cn } from '../lib/utils';
 
 type AuthTab = 'signin' | 'signup';
