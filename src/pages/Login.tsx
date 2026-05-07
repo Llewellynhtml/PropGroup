@@ -83,13 +83,7 @@ export default function Login() {
 
         <div className="relative z-10">
           <div className="flex items-center gap-4 mb-16">
-            <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-brand-teal to-brand-teal-deep rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative w-14 h-14 bg-gradient-to-br from-brand-teal to-brand-teal-deep rounded-2xl flex items-center justify-center shadow-[0_8px_30px_rgba(30,151,171,0.3)] border border-white/10">
-                <PremiumHouse className="text-white" size={28} />
-              </div>
-            </div>
-            <span className="text-2xl font-display font-bold text-white tracking-tight">PropPost</span>
+            <img src="/proppost-logo.png" alt="PropPost" className="h-10 w-auto" />
           </div>
 
           <motion.div
@@ -159,13 +153,7 @@ export default function Login() {
         >
           {/* Mobile Logo */}
           <div className="lg:hidden flex flex-col items-center mb-12">
-            <div className="relative mb-6">
-              <div className="absolute -inset-2 bg-gradient-to-r from-brand-teal to-brand-teal-deep rounded-3xl blur-xl opacity-20"></div>
-              <div className="relative w-20 h-20 bg-gradient-to-br from-brand-teal to-brand-teal-deep rounded-[2rem] flex items-center justify-center shadow-2xl border border-white/10">
-                <PremiumHouse className="text-white" size={40} />
-              </div>
-            </div>
-            <h1 className="text-3xl font-display font-bold text-brand-charcoal tracking-tight">PropPost</h1>
+            <img src="/proppost-logo.png" alt="PropPost" className="h-14 w-auto" />
           </div>
 
           <div className="mb-10">
