@@ -65,10 +65,7 @@ export function useAddProperty() {
         resolvedAgencyId = agentRow?.agency_id || null;
 
         if (!resolvedAgencyId) {
-          throw new Error(
-            'Your account is not linked to an agency yet. ' +
-            'Ask your agency admin for an invite code and update your profile.'
-          );
+          console.warn('Agent has no agency_id — independent agent, proceeding without agency link.');
         }
       }
 
