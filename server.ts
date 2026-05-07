@@ -14,22 +14,36 @@ try {
   console.error("Could not load DB/worker modules (native deps may be missing):", e);
 }
 
-// Import Routes
-import authRoutes from "./server/routes/auth.ts";
-import propertyRoutes from "./server/routes/properties.ts";
-import agentRoutes from "./server/routes/agents.ts";
-import amenityRoutes from "./server/routes/amenities.ts";
-import brandingRoutes from "./server/routes/branding.ts";
-import templateRoutes from "./server/routes/templates.ts";
-import historyRoutes from "./server/routes/history.ts";
-import postRoutes from "./server/routes/posts.ts";
-import scheduleRoutes from "./server/routes/schedules.ts";
-import uploadRoutes from "./server/routes/uploads.ts";
-import leadRoutes from "./server/routes/leads.ts";
-import analyticsRoutes from "./server/routes/analytics.ts";
-import agencyRoutes from "./server/routes/agencies.ts";
-import campaignRoutes from "./server/routes/campaigns.ts";
-import commentRoutes from "./server/routes/comments.ts";
+// Routes loaded dynamically to prevent native module crashes
+let authRoutes: any, propertyRoutes: any, agentRoutes: any, amenityRoutes: any;
+let brandingRoutes: any, templateRoutes: any, historyRoutes: any, postRoutes: any;
+let scheduleRoutes: any, uploadRoutes: any, leadRoutes: any, analyticsRoutes: any;
+let agencyRoutes: any, campaignRoutes: any, commentRoutes: any;
+let routesLoaded = false;
+
+async function loadRoutes() {
+  try {
+    authRoutes     = (await import("./server/routes/auth.ts")).default;
+    propertyRoutes = (await import("./server/routes/properties.ts")).default;
+    agentRoutes    = (await import("./server/routes/agents.ts")).default;
+    amenityRoutes  = (await import("./server/routes/amenities.ts")).default;
+    brandingRoutes = (await import("./server/routes/branding.ts")).default;
+    templateRoutes = (await import("./server/routes/templates.ts")).default;
+    historyRoutes  = (await import("./server/routes/history.ts")).default;
+    postRoutes     = (await import("./server/routes/posts.ts")).default;
+    scheduleRoutes = (await import("./server/routes/schedules.ts")).default;
+    uploadRoutes   = (await import("./server/routes/uploads.ts")).default;
+    leadRoutes     = (await import("./server/routes/leads.ts")).default;
+    analyticsRoutes= (await import("./server/routes/analytics.ts")).default;
+    agencyRoutes   = (await import("./server/routes/agencies.ts")).default;
+    campaignRoutes = (await import("./server/routes/campaigns.ts")).default;
+    commentRoutes  = (await import("./server/routes/comments.ts")).default;
+    routesLoaded = true;
+    console.log("All routes loaded successfully");
+  } catch (e) {
+    console.error("Could not load routes (native deps missing):", e);
+  }
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -53,6 +67,10 @@ try {
 
 async function startServer() {
   console.log(`Starting server in ${process.env.NODE_ENV || 'development'} mode`);
+
+  // Load routes (may fail if native deps missing — app still serves frontend)
+  await loadRoutes();
+
   const app = express();
   
   // Request Logger
@@ -67,22 +85,26 @@ async function startServer() {
   app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
   app.use("/uploads/posts", express.static(path.join(__dirname, "public/uploads/posts")));
 
-  // API Routes
-  app.use("/api/auth", authRoutes);
-  app.use("/api/properties", propertyRoutes);
-  app.use("/api/agents", agentRoutes);
-  app.use("/api/amenities", amenityRoutes);
-  app.use("/api/branding", brandingRoutes);
-  app.use("/api/templates", templateRoutes);
-  app.use("/api/history", historyRoutes);
-  app.use("/api/posts", postRoutes);
-  app.use("/api/scheduled_posts", scheduleRoutes);
-  app.use("/api/leads", leadRoutes);
-  app.use("/api/analytics", analyticsRoutes);
-  app.use("/api/agencies", agencyRoutes);
-  app.use("/api/campaigns", campaignRoutes);
-  app.use("/api/comments", commentRoutes);
-  app.use("/api", uploadRoutes);
+  // API Routes — only mount if routes loaded successfully
+  if (routesLoaded) {
+    app.use("/api/auth", authRoutes);
+    app.use("/api/properties", propertyRoutes);
+    app.use("/api/agents", agentRoutes);
+    app.use("/api/amenities", amenityRoutes);
+    app.use("/api/branding", brandingRoutes);
+    app.use("/api/templates", templateRoutes);
+    app.use("/api/history", historyRoutes);
+    app.use("/api/posts", postRoutes);
+    app.use("/api/scheduled_posts", scheduleRoutes);
+    app.use("/api/leads", leadRoutes);
+    app.use("/api/analytics", analyticsRoutes);
+    app.use("/api/agencies", agencyRoutes);
+    app.use("/api/campaigns", campaignRoutes);
+    app.use("/api/comments", commentRoutes);
+    app.use("/api", uploadRoutes);
+  } else {
+    console.warn("API routes not mounted — SQLite unavailable. Frontend still served via Supabase.");
+  }
 
   // 404 for unmatched API routes
   app.all("/api/*", (req, res) => {
