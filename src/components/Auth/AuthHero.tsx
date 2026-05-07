@@ -47,14 +47,8 @@ export default function AuthHero({
       </div>
       
       {/* Logo */}
-      <div className="relative z-10 flex items-center gap-4">
-        <div className="relative group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-brand-teal to-brand-teal-deep rounded-2xl blur opacity-25"></div>
-          <div className="relative w-14 h-14 bg-gradient-to-br from-brand-teal to-brand-teal-deep rounded-2xl flex items-center justify-center shadow-[0_8px_30px_rgba(30,151,171,0.3)] border border-white/10">
-            <PremiumHouse className="text-white" size={28} />
-          </div>
-        </div>
-        <span className="text-2xl font-display font-bold text-white tracking-tight">PropPost</span>
+      <div className="relative z-10">
+        <img src="/proppost-logo.png" alt="PropPost" className="h-10 w-auto" />
       </div>
 
       {/* Center Content */}
