@@ -98,18 +98,11 @@ export default function Sidebar({ activePage, setActivePage, isCollapsed, setIsC
             animate={{ opacity: isCollapsed ? 0 : 1 }}
             className={cn("flex items-center gap-3", isCollapsed && "hidden")}
           >
-            <div className="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-200" aria-hidden="true">
-              <Megaphone className="text-white w-5 h-5" strokeWidth={2.5} />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-black text-lg tracking-tight text-gray-900 leading-none">Prop-Post</span>
-            </div>
+            <img src="/proppost-logo.png" alt="PropPost" className="h-8 w-auto" />
           </motion.div>
           
           {isCollapsed && (
-            <div className="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto lg:flex hidden shadow-lg shadow-indigo-200" aria-hidden="true">
-              <Megaphone className="text-white w-5 h-5" strokeWidth={2.5} />
-            </div>
+            <img src="/proppost-logo.png" alt="PropPost" className="h-8 w-auto mx-auto lg:flex hidden" />
           )}
 
           <button 
