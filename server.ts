@@ -76,10 +76,13 @@ async function startServer() {
   });
 
   // Always serve the built dist folder
-  const distPath = path.join(__dirname, "dist");
-  app.use(express.static(distPath));
+  const distPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "dist");
+  console.log("Serving static files from:", distPath);
+  app.use(express.static(distPath, { index: false }));
   app.get("*", (_req, res) => {
-    res.sendFile(path.join(distPath, "index.html"));
+    const indexPath = path.join(distPath, "index.html");
+    console.log("Serving index.html from:", indexPath);
+    res.sendFile(indexPath);
   });
 
   const PORT = Number(process.env.PORT) || 3000;
