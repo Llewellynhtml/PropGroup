@@ -75,8 +75,9 @@ async function startServer() {
     res.status(500).json({ error: "Internal Server Error", message: err.message });
   });
 
-  // Always serve the built dist folder
-  const distPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "dist");
+  // Serve the built dist folder - use cwd() which is always the project root on Render
+  const distPath = path.join(process.cwd(), "dist");
+  console.log("CWD:", process.cwd());
   console.log("Serving static files from:", distPath);
   app.use(express.static(distPath, { index: false }));
   app.get("*", (_req, res) => {
